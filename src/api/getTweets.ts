@@ -17,7 +17,6 @@ type Tweet = {
 }
 
 type GetTweetsResponse = {
-  message: string;
   tweets: Tweet[];
 }
 

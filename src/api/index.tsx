@@ -1,4 +1,4 @@
-const base_url = "http://localhost:1234"
+const base_url = "http://127.0.0.1:1234"
 
 export async function get(url: string) {
   const response = await fetch(

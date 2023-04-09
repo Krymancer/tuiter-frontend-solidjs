@@ -1,4 +1,4 @@
-import { For, Show, createEffect, createResource, createSignal } from "solid-js";
+import { For, Show, Suspense, createResource } from "solid-js";
 
 import PostArea from "~/components/PostArea";
 import Tweet from "~/components/Tweet";
@@ -6,23 +6,16 @@ import Tweet from "~/components/Tweet";
 import api from "~/api";
 
 export default function Home() {
-  const [tweets, setTweets] = createSignal<Array<any>>([]);
-  const [loading, setLoading] = createSignal(true);
-
-  createEffect(async () => {
-    const tweets = await api.getTweets();
-    setTweets(tweets.tweets);
-    setLoading(false);
-  });
+  const [data, { refetch }] = createResource(api.getTweets);
 
   return (
     <main class="flex flex-col gap-4 items-center mb-2">  
-      <PostArea />
-      <Show when={!loading()} fallback={<Loading />}>
-        <For each={tweets()}>
+      <PostArea callback={refetch}/>
+      <Suspense fallback={<Loading />}>
+        <For each={data()?.tweets}>
           {(tweet) => <Tweet {...tweet} />}
         </For>
-      </Show>
+      </Suspense>
     </main>
   );
 }

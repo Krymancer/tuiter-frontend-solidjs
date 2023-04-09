@@ -3,15 +3,16 @@ import { Show, createSignal } from 'solid-js';
 import { useGlogalContext } from "~/store";
 import api from '~/api';
 
-export default function Navbar() {
+export default function PostArea(props: {callback: () => void}) {
   const [content, setContent] = createSignal("");
 
   const { user, token } = useGlogalContext();
 
   async function handlePostTweet() {
     if(content() === "") return;
-    console.log(content(), token() ?? "");
     await api.createTweet(content(), token() ?? "");
+    props.callback();
+    setContent("");
   }
 
   return (
