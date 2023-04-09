@@ -1,5 +1,10 @@
+import { createEffect, Show } from 'solid-js';
+import { A } from "solid-start";
+
 import { AiOutlineSearch } from 'solid-icons/ai';
 import { IoExitOutline } from 'solid-icons/io'
+
+import { useGlogalContext } from '~/store';
 
 export default function Navbar() {
   return (
@@ -13,9 +18,9 @@ export default function Navbar() {
 
 function Logo() {
   return (
-    <div class="flex cursor-pointer items-center w-1/3 justify-center">
-      <a class="flex flex-row font-bold text-4xl">Tui<pre class="text-brand font-sans">ter</pre></a>
-    </div>
+      <div class="flex items-center w-1/3 justify-center select-none">
+        <A href="/" class="flex flex-row font-bold text-4xl cursor-pointer">Tui<pre class="text-brand font-sans">ter</pre></A>
+      </div>
   );
 };
 
@@ -29,17 +34,21 @@ function Search() {
 }
 
 function User(props: {username: string, icon: string}) {
+  const {user, setUser} = useGlogalContext();
+
   return (
     <div class="flex flex-row items-center justify-around gap-4 w-1/3">
-            <div class="flex flex-row items-center justify-around gap-4">
-              <div class="flex flex-row gap-1 items-center">
-                  <img src={props.icon} class="rounded-full w-10 h-10" />
-                  <span class="font-bold text-md">{`@${props.username}`}</span>
+            <Show when={user()} fallback={ <A href="/login"><div class="rounded-xl bg-brand text-gray-700 hover:bg-yellow-500 font-bold cursor-pointer transition w-20 flex items-center justify-center text-lg self-end h-full">Login</div></A>}>
+              <div class="flex flex-row items-center justify-around gap-4">
+                <div class="flex flex-row gap-1 items-center">
+                    <img src={user()!.icon} class="rounded-full w-10 h-10" />
+                    <span class="font-bold text-md">{`@${user()!.username}`}</span>
+                </div>
+                <div class="flex items-center hover:text-brand cursor-pointer">
+                    <IoExitOutline size={28} onclick={e => {setUser(null);}}/>
+                </div>
               </div>
-              <div class="flex items-center hover:text-brand cursor-pointer">
-                  <IoExitOutline size={28}/>
-              </div>
-            </div>
+            </Show>
         </div>
   );
 }

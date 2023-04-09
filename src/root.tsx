@@ -15,7 +15,8 @@ import {
 } from "solid-start";
 import "./root.css";
 
-import Navbar from "./components/Navbar";
+import { ContextProvider } from "~/store";
+import Navbar from "~/components/Navbar";
 
 export default function Root() {
   const location = useLocation();
@@ -31,15 +32,17 @@ export default function Root() {
         <Meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Body>
-        <Suspense>
-          <ErrorBoundary>
-            <Navbar />
-            <Routes>
-              <FileRoutes />
-            </Routes>
-          </ErrorBoundary>
-        </Suspense>
-        <Scripts />
+        <ContextProvider>
+          <Suspense>
+            <ErrorBoundary>
+              <Navbar />
+              <Routes>
+                <FileRoutes />
+              </Routes>
+            </ErrorBoundary>
+          </Suspense>
+          <Scripts />
+        </ContextProvider>
       </Body>
     </Html>
   );
